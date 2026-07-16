@@ -1,0 +1,41 @@
+# === Secrets — never commit ===
+*.local
+*.secret
+.env
+.env.*
+*secret*
+*token*
+*credential*
+*.key
+*.pem
+.zsh_local
+.zshrc.local
+
+# === Claude Code: only settings.json / commands are tracked ===
+# Everything else under .claude is machine state / history / cache.
+claude/.claude/*
+!claude/.claude/settings.json
+!claude/.claude/commands/
+claude/.claude/settings.local.json
+
+# === gh: hosts.yml holds the auth token — never track it ===
+gh/.config/gh/hosts.yml
+
+# === git: machine-local identity is never tracked ===
+.gitconfig.local
+
+# === karabiner: machine-generated backups ===
+karabiner/.config/karabiner/automatic_backups/
+
+# === macOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# === Editor ===
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
