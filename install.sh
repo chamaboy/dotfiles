@@ -14,15 +14,17 @@ cd "$DOTFILES_DIR"
 # Packages to install by default (raycast is manual — see README).
 DEFAULT_PACKAGES=(zsh ghostty claude git gh karabiner)
 
-# --- Ensure GNU Stow is available ---
-if ! command -v stow >/dev/null 2>&1; then
-  echo "GNU Stow not found. Installing via Homebrew..."
-  if command -v brew >/dev/null 2>&1; then
-    brew install stow
-  else
-    echo "Error: Homebrew not found. Install it first: https://brew.sh" >&2
-    exit 1
-  fi
+# --- Ensure Homebrew is available ---
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Error: Homebrew not found. Install it first: https://brew.sh" >&2
+  exit 1
+fi
+
+# --- Install packages from Brewfile (taps, CLI tools, GUI apps) ---
+# This also installs stow itself, so it must run before stowing.
+if [ -f "$DOTFILES_DIR/Brewfile" ]; then
+  echo "Installing packages from Brewfile..."
+  brew bundle --file="$DOTFILES_DIR/Brewfile"
 fi
 
 # --- Determine packages ---

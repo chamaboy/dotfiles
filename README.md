@@ -6,6 +6,7 @@ Personal macOS dotfiles, managed with [GNU Stow](https://www.gnu.org/software/st
 
 | Package     | Manages                          | Target                          |
 | ----------- | -------------------------------- | ------------------------------- |
+| `Brewfile`  | Homebrew taps, CLI tools, apps   | (installed, not symlinked)      |
 | `zsh`       | `.zshrc`, `.zshenv`, `.zprofile` | `~/`                            |
 | `ghostty`   | Ghostty terminal config          | `~/.config/ghostty/config`      |
 | `claude`    | Claude Code `settings.json`      | `~/.claude/settings.json`       |
@@ -22,8 +23,10 @@ cd ~/Dotfiles
 ./install.sh
 ```
 
-`install.sh` installs GNU Stow if missing, backs up any conflicting real files
-to `~/.dotfiles-backup/<timestamp>/`, then symlinks each package into `$HOME`.
+`install.sh` first runs `brew bundle` to install everything in the `Brewfile`
+(taps, CLI tools, GUI apps — including Stow itself), backs up any conflicting
+real files to `~/.dotfiles-backup/<timestamp>/`, then symlinks each package
+into `$HOME`. Homebrew must already be installed (https://brew.sh).
 
 Install specific packages only:
 
@@ -45,6 +48,25 @@ To remove links for a package:
 ```sh
 stow --delete --target="$HOME" zsh
 ```
+
+## Homebrew (Brewfile)
+
+The `Brewfile` is a declarative list of Homebrew taps, CLI tools (`brew`), and
+GUI apps (`cask`). `install.sh` applies it automatically, or run it directly:
+
+```sh
+brew bundle --file=Brewfile          # install everything listed
+brew bundle check --file=Brewfile    # check what's missing / outdated
+```
+
+After installing or removing packages, refresh the list:
+
+```sh
+brew bundle dump --file=Brewfile --force
+```
+
+VS Code extensions are **not** tracked here — they sync via VS Code Settings
+Sync. Global `npm`/`uv` tools are likewise left out.
 
 ## Secrets
 
