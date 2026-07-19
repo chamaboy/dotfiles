@@ -18,9 +18,6 @@ claude/.claude/*
 !claude/.claude/commands/
 claude/.claude/settings.local.json
 
-# === gh: hosts.yml holds the auth token — never track it ===
-gh/.config/gh/hosts.yml
-
 # === git: machine-local identity is never tracked ===
 .gitconfig.local
 

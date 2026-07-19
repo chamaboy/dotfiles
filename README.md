@@ -11,7 +11,6 @@ Personal macOS dotfiles, managed with [GNU Stow](https://www.gnu.org/software/st
 | `ghostty`   | Ghostty terminal config          | `~/.config/ghostty/config`      |
 | `claude`    | Claude Code `settings.json`      | `~/.claude/settings.json`       |
 | `git`       | Global git config + ignore       | `~/.config/git/`                |
-| `gh`        | GitHub CLI config (no token)     | `~/.config/gh/config.yml`       |
 | `karabiner` | Karabiner-Elements key mappings  | `~/.config/karabiner/`          |
 | `raycast`   | Raycast (manual — see below)     | —                               |
 
@@ -83,11 +82,11 @@ This repo is **public**. Never commit tokens, keys, or credentials.
   	email = you@example.com
   EOF
   ```
-- `gh/hosts.yml` (GitHub auth token) is **not** tracked — run `gh auth login`
-  on each new machine instead.
+- GitHub CLI (`gh`) config is **not** tracked — it's just defaults. Run
+  `gh auth login` on each new machine to authenticate.
 - The `.gitignore` blocks `*.local`, `.env*`, `*token*`, `*secret*`, `*.key`,
-  `gh/hosts.yml`, karabiner auto-backups, and everything under
-  `claude/.claude/` except `settings.json`.
+  karabiner auto-backups, and everything under `claude/.claude/` except
+  `settings.json`.
 
 ## Raycast
 

@@ -12,7 +12,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DOTFILES_DIR"
 
 # Packages to install by default (raycast is manual — see README).
-DEFAULT_PACKAGES=(zsh ghostty claude git gh karabiner)
+DEFAULT_PACKAGES=(zsh ghostty claude git karabiner)
 
 # --- Ensure Homebrew is available ---
 if ! command -v brew >/dev/null 2>&1; then
