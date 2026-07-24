@@ -22,10 +22,20 @@ cd ~/Dotfiles
 ./install.sh
 ```
 
-`install.sh` first runs `brew bundle` to install everything in the `Brewfile`
-(taps, CLI tools, GUI apps — including Stow itself), backs up any conflicting
-real files to `~/.dotfiles-backup/<timestamp>/`, then symlinks each package
-into `$HOME`. Homebrew must already be installed (https://brew.sh).
+`install.sh` runs, in order:
+
+1. **`brew bundle`** — installs everything in the `Brewfile` (taps, CLI tools,
+   GUI apps — including Stow itself).
+2. **Oh My Zsh + prompt + plugins** — installs Oh My Zsh if missing, then clones
+   the [Powerlevel10k](https://github.com/romkatv/powerlevel10k) theme and the
+   `zsh-autosuggestions` / `zsh-syntax-highlighting` plugins that `.zshrc`
+   expects. Each step is idempotent (skipped if already present).
+3. **Stow** — backs up any conflicting real files to
+   `~/.dotfiles-backup/<timestamp>/`, then symlinks each package into `$HOME`.
+
+The only prerequisite is Homebrew (https://brew.sh); everything the shell needs
+is installed for you. On first launch, Powerlevel10k runs its configuration
+wizard if `~/.p10k.zsh` doesn't exist yet (or run `p10k configure` anytime).
 
 Install specific packages only:
 

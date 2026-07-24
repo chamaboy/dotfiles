@@ -27,6 +27,33 @@ if [ -f "$DOTFILES_DIR/Brewfile" ]; then
   brew bundle --file="$DOTFILES_DIR/Brewfile"
 fi
 
+# --- Install Oh My Zsh + prompt theme + plugins (idempotent) ---
+# .zshrc expects oh-my-zsh, the powerlevel10k theme, and two custom plugins.
+# Install whatever is missing so a fresh machine needs no manual steps.
+ZSH_DIR="${ZSH:-$HOME/.oh-my-zsh}"
+ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$ZSH_DIR/custom}"
+
+if [ ! -d "$ZSH_DIR" ]; then
+  echo "Installing Oh My Zsh..."
+  # Unattended: don't run zsh, don't touch ~/.zshrc (we stow ours), don't chsh
+  # (macOS already defaults to zsh).
+  RUNZSH=no KEEP_ZSHRC=yes CHSH=no \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# Clone a git repo into $2 only if it isn't already there.
+clone_if_missing() {
+  if [ ! -d "$2" ]; then
+    echo "  cloning: $(basename "$2")"
+    git clone --depth=1 "$1" "$2"
+  fi
+}
+
+echo "Installing zsh theme & plugins..."
+clone_if_missing https://github.com/romkatv/powerlevel10k.git             "$ZSH_CUSTOM_DIR/themes/powerlevel10k"
+clone_if_missing https://github.com/zsh-users/zsh-autosuggestions.git     "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
+clone_if_missing https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
+
 # --- Determine packages ---
 if [ "$#" -gt 0 ]; then
   PACKAGES=("$@")
@@ -63,3 +90,5 @@ if [ -d "$backup_dir" ]; then
 fi
 
 echo "Done. Restart your shell (exec zsh) to pick up zsh changes."
+echo "First launch runs the Powerlevel10k wizard if ~/.p10k.zsh is absent"
+echo "(or run 'p10k configure' anytime)."
