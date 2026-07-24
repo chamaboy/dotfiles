@@ -17,6 +17,10 @@ brew "aws-sam-cli"
 brew "awscli"
 # GitHub command-line tool
 brew "gh"
+# JavaScript tool manager (Node/npm/yarn/pnpm); PATH set via VOLTA_HOME in .zshenv
+brew "volta"
+# Ruby version manager (.zshrc runs `rbenv init`)
+brew "rbenv"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
 # Terminal multiplexer

@@ -110,6 +110,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Version managers. Node is managed by Volta (shim-based, no init hook needed —
+# see VOLTA_HOME in .zshenv). Ruby uses rbenv.
+command -v rbenv >/dev/null && eval "$(rbenv init -)"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
