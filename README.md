@@ -16,11 +16,26 @@ Personal macOS dotfiles, managed with [GNU Stow](https://www.gnu.org/software/st
 
 ## Install
 
+**Homebrew is the only prerequisite.** It pulls in the Xcode Command Line Tools
+(and with them `git`), and `install.sh` installs Stow and everything else from
+the `Brewfile`. `zsh` and `curl` already ship with macOS.
+
 ```sh
+# 1. Homebrew — interactive, asks for your password
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. Put brew on PATH for this shell. Only needed once: after step 3 the
+#    stowed .zprofile does it for every new shell.
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# 3. Dotfiles
 git clone https://github.com/chamaboy/dotfiles.git ~/Dotfiles
 cd ~/Dotfiles
 ./install.sh
 ```
+
+Skipping step 2 makes `install.sh` stop with `Homebrew not found` — the install
+succeeded, `brew` just isn't on `PATH` in the shell you started it from.
 
 `install.sh` runs, in order:
 
@@ -33,14 +48,38 @@ cd ~/Dotfiles
 3. **Stow** — backs up any conflicting real files to
    `~/.dotfiles-backup/<timestamp>/`, then symlinks each package into `$HOME`.
 
-The only prerequisite is Homebrew (https://brew.sh); everything the shell needs
-is installed for you. On first launch, Powerlevel10k runs its configuration
-wizard if `~/.p10k.zsh` doesn't exist yet (or run `p10k configure` anytime).
+On first launch, Powerlevel10k runs its configuration wizard if `~/.p10k.zsh`
+doesn't exist yet (or run `p10k configure` anytime).
 
 Install specific packages only:
 
 ```sh
 ./install.sh zsh ghostty
+```
+
+Re-running is always safe — every step is idempotent, so nothing is duplicated
+and a package whose symlink was replaced by a real file gets repaired.
+
+### Reading the result
+
+The script separates failures that make the rest pointless from ones that
+don't, so a single broken cask can't stop your configs from being linked.
+
+| Output | What happened | What to do |
+| ---------------------------- | ------------------------------------------ | ------------------------ |
+| `Done.`                      | Everything succeeded (exit 0)              | Nothing |
+| `Completed with N warning(s)`| **Configs are linked**; some installs failed (exit 1) | Read the list, fix, re-run |
+| `Error: ...` and stops       | Nothing ran — Homebrew or Stow is missing  | Install it, re-run |
+
+A non-zero exit means "something didn't install", **not** "nothing happened" —
+the warning summary is printed after the stow step has already finished.
+
+Known warning: `session-manager-plugin` is a cask whose installer needs a `sudo`
+password, so it fails under a non-interactive run. Install it once by hand and
+the warning goes away:
+
+```sh
+brew bundle --file=~/Dotfiles/Brewfile
 ```
 
 ## How it works
