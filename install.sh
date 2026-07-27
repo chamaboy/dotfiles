@@ -54,6 +54,13 @@ clone_if_missing https://github.com/romkatv/powerlevel10k.git             "$ZSH_
 clone_if_missing https://github.com/zsh-users/zsh-autosuggestions.git     "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
 clone_if_missing https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
 
+# --- Install Claude Code (idempotent) ---
+# Self-updating tool; we only bootstrap the binary on a fresh machine.
+if ! command -v claude >/dev/null 2>&1; then
+  echo "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
 # --- Determine packages ---
 if [ "$#" -gt 0 ]; then
   PACKAGES=("$@")
