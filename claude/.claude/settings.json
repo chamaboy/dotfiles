@@ -4,5 +4,6 @@
     "playwright@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": false,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "preferredNotifChannel": "terminal_bell"
 }
