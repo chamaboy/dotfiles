@@ -23,6 +23,7 @@ shell-integration = zsh
 shell-integration-features = cursor,sudo,title
 copy-on-select = clipboard
 confirm-close-surface = false
+desktop-notifications = true
 
 # --- Keybindings ---
 keybind = cmd+t=new_tab
