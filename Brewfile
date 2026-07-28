@@ -33,5 +33,8 @@ brew "supabase/tap/supabase", trusted: true
 # --- GUI apps (casks) ---
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Keyboard customiser (config lives in the `karabiner` stow package). Installs a
+# system extension, so `brew bundle` prompts for a sudo password interactively.
+cask "karabiner-elements"
 # Plugin for AWS CLI to start and end sessions that connect to managed instances
 cask "session-manager-plugin"
