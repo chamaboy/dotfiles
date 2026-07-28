@@ -30,6 +30,10 @@ brew "uv"
 # Supabase CLI
 brew "supabase/tap/supabase", trusted: true
 
+# --- Fonts ---
+# Nerd Font used by Ghostty (font-family in ghostty/config) and Powerlevel10k icons
+cask "font-fira-code-nerd-font"
+
 # --- GUI apps (casks) ---
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
