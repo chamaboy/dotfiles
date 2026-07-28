@@ -170,5 +170,5 @@ if [ "${#WARNINGS[@]}" -gt 0 ]; then
 fi
 
 echo "Done. Restart your shell (exec zsh) to pick up zsh changes."
-echo "First launch runs the Powerlevel10k wizard if ~/.p10k.zsh is absent"
-echo "(or run 'p10k configure' anytime)."
+echo "Prompt style comes from the stowed ~/.p10k.zsh; 'p10k configure' restyles"
+echo "it (writes through the symlink into this repo — commit afterwards)."
