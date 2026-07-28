@@ -30,6 +30,9 @@ karabiner/.config/karabiner/automatic_backups/
 .LSOverride
 Icon?
 
+# === Language-server / tooling artifacts ===
+.ruby-lsp/
+
 # === Editor ===
 *.swp
 *.swo
