@@ -155,6 +155,13 @@ if [ -d "$backup_dir" ]; then
   echo "Backed up pre-existing files to: $backup_dir"
 fi
 
+# --- Apply macOS system preferences (Dock, trackpad, keyboard shortcuts) ---
+# Idempotent absolute values — see macos.sh. Failure shouldn't block the
+# summary below, and re-running the script (or macos.sh alone) retries it.
+if ! "$DOTFILES_DIR/macos.sh"; then
+  warn "macos.sh failed (see output above); re-run './macos.sh' to retry"
+fi
+
 # --- Report anything that was skipped or failed ---
 # Exit non-zero so callers and CI can tell a partial run from a clean one,
 # while the work that *could* be done has still been done.
