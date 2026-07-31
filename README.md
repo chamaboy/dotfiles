@@ -12,7 +12,8 @@ Personal macOS dotfiles, managed with [GNU Stow](https://www.gnu.org/software/st
 | `claude`    | Claude Code `settings.json`      | `~/.claude/settings.json`       |
 | `git`       | Global git config + ignore       | `~/.config/git/`                |
 | `karabiner` | Karabiner-Elements key mappings  | `~/.config/karabiner/`          |
-| `raycast`   | Raycast (manual — see below)     | —                               |
+| `macos.sh`  | macOS system preferences (Dock, trackpad, shortcuts) | (applied via `defaults`, not symlinked) |
+| `raycast`   | Raycast settings export (imported via GUI — see below) | (not symlinked) |
 
 ## Install
 
@@ -50,6 +51,8 @@ succeeded, `brew` just isn't on `PATH` in the shell you started it from.
    fresh machine.
 4. **Stow** — backs up any conflicting real files to
    `~/.dotfiles-backup/<timestamp>/`, then symlinks each package into `$HOME`.
+5. **macOS defaults** — applies the System Settings preferences in `macos.sh`
+   (Dock auto-hide/position, trackpad speed, cmd+` window switching).
 
 The Powerlevel10k config is tracked (`zsh/.p10k.zsh`), so the prompt looks the
 same on every machine with no wizard on first launch. To restyle it, run
@@ -119,6 +122,8 @@ the repo (the declaration) in sync.
 | Edited a tracked config (`~/.zshrc`, ghostty, …) | `git commit && git push` — no stow needed |
 | Created a **new** config file | Move it into its package (path mirrors `$HOME`), `./install.sh <pkg>`, commit |
 | `brew install`-ed a keeper | Add a line to `Brewfile` by hand, commit |
+| Changed a System Settings preference worth keeping | Add its `defaults write` line to `macos.sh`, commit |
+| Changed Raycast settings | Re-export over `raycast/Raycast.rayconfig` (GUI), commit |
 | Added a tool that needs install steps (zsh plugin, …) | Also add the step to `install.sh` (e.g. `clone_if_missing …`) — config alone won't set up the next machine |
 
 On the other machine, after `git pull`:
@@ -176,14 +181,37 @@ This repo is **public**. Never commit tokens, keys, or credentials.
   karabiner auto-backups, and everything under `claude/.claude/` except
   `settings.json`.
 
+## macOS defaults (macos.sh)
+
+System Settings choices live in plists that the `defaults` command can read and
+write, so the ones worth syncing are scripted in `macos.sh` (run by
+`install.sh`, or directly). Currently: Dock auto-hide + right position,
+trackpad tracking speed, and "move focus to next window" on cmd+`.
+
+Every line sets an absolute value, so re-running never toggles anything. Most
+changes apply immediately; trackpad/keyboard-shortcut ones may need a re-login.
+
+To capture a new setting: change it in System Settings, find the key by diffing
+`defaults read` output before/after, and add the `defaults write` line here.
+
 ## Raycast
 
 Raycast stores its config in an **encrypted SQLite database**, so it can't be
-tracked as plain files. Sync it one of two ways:
+stowed as plain files. Instead the repo tracks a **password-encrypted export
+snapshot**: `raycast/Raycast.rayconfig` (Settings → Advanced → *Export*).
 
-1. **Raycast Cloud Sync** (Raycast Pro) — Settings → Cloud Sync. Recommended.
-2. **Manual export/import** — Settings → Advanced → *Export / Import*. Save the
-   exported `.rayconfig` outside this repo (it may contain secrets).
+- **New machine**: after `./install.sh`, run Raycast's *Import Settings & Data*,
+  pick `raycast/Raycast.rayconfig`, enter the export password (it's in the
+  password manager). This is a one-time GUI step, like Karabiner's approvals.
+- **Changed Raycast settings**: re-export over the same file, commit. Like the
+  Brewfile, the export only updates when you do it by hand — the file is a
+  snapshot, not a live sync.
+
+Why committing this to a public repo is OK *today*: no Store extensions are
+installed, so the export holds hotkeys/aliases/preferences — nothing secret —
+and the file itself is encrypted with the export password. **If an extension
+that takes an API key ever gets installed, revisit this** (move the export to
+private storage, or at least rotate to a strong unique password).
 
 ## Claude Code
 
